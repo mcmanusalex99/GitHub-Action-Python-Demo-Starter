@@ -1,0 +1,33 @@
+name: Update the Repo with a new phrase
+
+on: 
+  #manual trigger here - we have to go in to github actions page and run this command
+  workflow_dispatch:
+
+jobs:
+
+  Refresh-Phrase:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@master
+    - name: install python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9.13'
+    - name: install requirements
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: run script
+      run: python Main.py
+
+    - name: commit files
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "Github Actions"
+        git add corporate_bs.txt
+        git commit -m 'Data updated' || echo "No changes to commit"
+        git push origin || echo "No changes to commit"
